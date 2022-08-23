@@ -1,0 +1,4 @@
+venv
+django_website/django_website/__pycache__/
+django_website/tweet/__pycache__/
+django_website/tweet/migrations/

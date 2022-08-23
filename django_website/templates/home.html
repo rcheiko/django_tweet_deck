@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}
+    <title>HOME</title>
+{% endblock title %}
+
+{% block style %}
+    <link  href={% static 'home_style.css' %} rel="stylesheet">
+{% endblock style %}
+
+
+{% block content %}
+<br>
+{% if logged %}
+    <a href={% url 'logout' %}>logout</a>
+{% else %}
+    <a href={% url 'auth' %}><i style="color:blue;" class="fa-brands fa-twitter"></i>Sign in twitter</a>
+{% endif %}
+{% endblock content %}
+        {% comment %} <form method="POST" class="form form-horizontal">
+            {% csrf_token %}
+            {% bootstrap_form form %}
+            {% buttons %}
+                <button type="submit" class="btn btn-primary">Tweet</button>
+            {% endbuttons %}
+        </form> {% endcomment %}

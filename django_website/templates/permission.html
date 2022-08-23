@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    <title>Give Permission</title>
+{% endblock title %}
+
+{% block content %}
+    <h3 style="text-align:center;">{{login}}</h3>
+    <h3 style="text-align:center;">{{alreadyADD}}</h3>
+    <form style="text-align:center;" method="POST">
+        {% csrf_token %}
+        {{form}}
+        <input type="submit" value="Add Permission">
+    </form>
+
+    {% for screen_name in UserPerm %}
+        <button class="deletePerm" data={{screen_name}}>Remove -> {{screen_name}}</button>
+    {% endfor %}
+
+    <script type="text/javascript">
+
+        $(document).ready(function() {
+
+            $('.deletePerm').click(function() {
+                $.ajax ({
+                    type: "POST",
+                    url: "/delete_permission/",
+                    dataType: "json",
+                    data:{
+                        "deleteName" : $(this).attr("data")
+                        },
+                    success: function(data){
+                        location.reload(true);
+                    }
+                })
+    
+            })
+    
+        })
+
+        function refreshPage() {
+        }
+
+        $.ajaxSetup({
+            beforeSend: function(xhr, settings) {
+                function getCookie(name) {
+                    var cookieValue = null;
+                    if (document.cookie && document.cookie != '') {
+                        var cookies = document.cookie.split(';');
+                        for (var i = 0; i < cookies.length; i++) {
+                            var cookie = jQuery.trim(cookies[i]);
+                            // Does this cookie string begin with the name we want?
+                            if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                                break;
+                            }
+                        }
+                    }
+                    return cookieValue;
+                }
+                if (!(/^http:.*/.test(settings.url) || /^https:.*/.test(settings.url))) {
+                    // Only send the token to relative URLs i.e. locally.
+                    xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+                }
+            } 
+       });
+
+    </script>
+
+{% endblock content %}

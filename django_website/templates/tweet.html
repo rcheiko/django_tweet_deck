@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+
+{% block title %}<title>Tweet</title>{% endblock title %}
+
+{% block content %}
+<form>
+    <select class="select_permission" required>
+        <option selected disabled hidden>Select which account you want to tweet</option>
+        {% for username in user_option %}
+            <option>{{username}}</option>
+        {% endfor %}
+    </select>
+
+    <label for="story">Tweet :</label>
+
+    <textarea required id="story" class="tweet_area" style="resize: none;" rows="5" cols="33" placeholder="Tell us you're tweet"></textarea>
+
+    <input class="select_tweet_permission_submit" type="submit" value="Tweet">
+</form>
+
+<script type="text/javascript">
+
+    $(document).ready(function() {
+
+        $('.select_tweet_permission_submit').click(function() {    
+
+            $.ajax ({
+                type: "POST",
+                url: "/form_tweet/",
+                dataType: "json",
+                data:{
+                    "uploadFile": $('#uploadFile').val(),
+                    "selected" : $('.select_permission').val(),
+                    "tweet" : $('.tweet_area').val(),
+                },
+                success: function(data){}
+            })
+        })
+    })
+
+    $.ajaxSetup({
+        beforeSend: function(xhr, settings) {
+            function getCookie(name) {
+                var cookieValue = null;
+                if (document.cookie && document.cookie != '') {
+                    var cookies = document.cookie.split(';');
+                    for (var i = 0; i < cookies.length; i++) {
+                        var cookie = jQuery.trim(cookies[i]);
+                        if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                            break;
+                        }
+                    }
+                }
+                return cookieValue;
+            }
+            if (!(/^http:.*/.test(settings.url) || /^https:.*/.test(settings.url))) {
+                // Only send the token to relative URLs i.e. locally.
+                xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+            }
+        } 
+   });
+</script>
+
+
+{% endblock content %}
